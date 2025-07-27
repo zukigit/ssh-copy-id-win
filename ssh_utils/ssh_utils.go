@@ -62,7 +62,6 @@ func HostKeyCallbackFunc(knownHostsPath string) ssh.HostKeyCallback {
 			return fmt.Errorf("failed to write to known_hosts: %w", err)
 		}
 
-		fmt.Println("Host key added to known_hosts.")
 		return nil
 	}
 }
