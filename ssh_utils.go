@@ -1,4 +1,4 @@
-package sshutils
+package main
 
 import (
 	"crypto/sha256"

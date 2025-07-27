@@ -8,24 +8,9 @@ import (
 	"strings"
 	"syscall"
 
-	sshutils "github.com/zukigit/ssh-copy-id-win/ssh_utils"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/term"
 )
-
-func checkIdentityFile(filePath string) {
-	_, err := os.Stat(filePath)
-	if err == nil {
-		return
-	}
-
-	if os.IsNotExist(err) {
-		fmt.Printf("ERROR: No identities found(%s)\n", filePath)
-		os.Exit(1)
-	}
-
-	panic(err)
-}
 
 func getPublicKey(filePath string) (string, error) {
 	_, err := os.Stat(filePath)
@@ -110,7 +95,7 @@ func main() {
 	var client *ssh.Client
 
 	if !*force {
-		_, err = sshutils.GetClientWithKey(hostname, *port, user, privateKeyFilepath, knownHostsPath)
+		_, err = GetClientWithKey(hostname, *port, user, privateKeyFilepath, knownHostsPath)
 		if err != nil {
 			fmt.Println("INFO: attempting to log in with the new key(s), to filter out any that are already installed")
 			fmt.Println("INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys")
@@ -122,7 +107,7 @@ func main() {
 	}
 
 	passwd := askPasswd(fmt.Sprintf("%s's password", flag.Arg(0)))
-	client, err = sshutils.GetClient(hostname, *port, user, passwd, knownHostsPath)
+	client, err = GetClient(hostname, *port, user, passwd, knownHostsPath)
 	if err != nil {
 		fmt.Printf("Permission denied. err: %s\n", err.Error())
 		os.Exit(1)
